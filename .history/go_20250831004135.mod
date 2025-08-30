@@ -6,11 +6,11 @@ require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
 	github.com/GoAdminGroup/components v0.0.2
 	github.com/GoAdminGroup/go-admin v1.2.26
-	github.com/GoAdminGroup/themes v0.0.48
+	github.com/GoAdminGroup/themes v0.0.45
 	github.com/go-echarts/go-echarts v1.0.0
 	github.com/golang-migrate/migrate/v4 v4.17.1
 	github.com/labstack/echo/v4 v4.12.0
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible
+	github.com/mattn/go-sqlite3 v1.14.32
 )
 
 require (
