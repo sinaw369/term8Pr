@@ -1,0 +1,2 @@
+-- Empty migration file for version 0
+-- This file is required by the migration tool
