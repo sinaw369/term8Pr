@@ -160,26 +160,6 @@ uploads/         # دارایی‌ها و آپلودها
 - `ProcessLine2`: فیلتر on-the-fly با `SearchKey`/`NotIncludeSearchKey` و توقف در `limit`.
 - مرتب‌سازی نهایی براساس زمان و تولید خروجی JSON خوانا.
 
-### الگوی Pipeline + Worker Pool برای افزایش بهره‌وری
-
-- در پیاده‌سازی جستجو، از ترکیب «خط لوله‌ای (Pipeline)» و «استخر کارگرها (Worker Pool)» استفاده شده است تا هم‌زمانی کنترل‌شده و بهره‌وری بالا حاصل شود:
-  - مرحله تولیدکننده (Producer): `CreateReaderForFile` اسکنر هر فایل را ساخته و روی کانال `inProgress` قرار می‌دهد.
-  - مرحله پردازش موازی (Workers): چند goroutine در `ProcessFile` به‌عنوان کارگر فعال هستند و از `inProgress` کار می‌گیرند، خطوط را خوانده و به کانال `inProgressLine` می‌فرستند. ظرفیت هم‌زمانی با semaphore محدود می‌شود.
-  - مرحله مصرف‌کننده/تجمیع (Consumer/Aggregator): `ProcessLine2` خطوط را از `inProgressLine` دریافت، فیلتر و در صورت نیاز مرتب‌سازی و محدودسازی (`limit`) را اعمال می‌کند.
-
-نمای کلی جریان داده‌ها:
-
-```text
-Files → [Producer] CreateReaderForFile → (chan inProgress)
-      → [Worker Pool] ProcessFile × N   → (chan inProgressLine)
-      → [Consumer] ProcessLine2 (Filter, Limit, Sort) → Result JSON
-```
-
-مزایا:
-- بهره‌گیری حداکثری از IO با موازی‌سازی کنترل‌شده.
-- ایجاد backpressure طبیعی با ظرفیت کانال‌ها برای جلوگیری از فشار بیش‌ازحد حافظه/CPU.
-- ساده‌بودن افزودن/کاهش تعداد کارگرها بر اساس منابع سیستم.
-
 ## اسکن معکوس فایل (backscanner)
 
 - خواندن chunk-محور از انتهای فایل، پیدا کردن `\n` و بازگردانی خطوط.
